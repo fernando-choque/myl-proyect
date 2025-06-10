@@ -6,24 +6,25 @@ import {
   Chip,
   Button,
 } from "@material-tailwind/react";
+import React, { useEffect, useState } from "react";
+import { list_documentos } from "../../services/services_gral";
 
 export function ModuloDocumentos() {
-  const documentos = [
-    {
-      nombre: "Informe de Inteligencia N°001",
-      clasificacion: "Secreto",
-      unidad: "Batallón 21",
-      subidoPor: "Cap. Pérez",
-      fecha: "2025-06-04",
-    },
-    {
-      nombre: "Reporte logístico 2024",
-      clasificacion: "Reservado",
-      unidad: "Unidad Logística Central",
-      subidoPor: "Tte. López",
-      fecha: "2025-06-01",
-    },
-  ];
+
+    const [documentos, setDocumentos] = useState([]);
+  useEffect(() => {
+    const fetchDocumentos = async () => {
+      try {
+        const data = await list_documentos();
+        setDocumentos(data);
+      } catch (error) {
+        console.error("Error al obtener anuncios:", error);
+      }
+    };
+
+    fetchDocumentos();
+  }, []);
+  console.log(documentos);
 
   return (
     <div className="mt-12 mb-8 flex flex-col gap-12">
@@ -60,24 +61,24 @@ export function ModuloDocumentos() {
 
                 return (
                   <tr key={key}>
-                    <td className={className}>{doc.nombre}</td>
+                    <td className={className}>{doc.Nombre}</td>
                     <td className={className}>
                       <Chip
                         variant="gradient"
                         color={
-                          doc.clasificacion === "Ultrasecreto"
+                          doc.Clasificación === "Ultrasecreto"
                             ? "red"
-                            : doc.clasificacion === "Secreto"
+                            : doc.Clasificación === "Secreto"
                             ? "blue"
                             : "green"
                         }
-                        value={doc.clasificacion}
+                        value={doc.Clasificación}
                         className="py-0.5 px-2 text-[11px] font-medium w-fit"
                       />
                     </td>
-                    <td className={className}>{doc.unidad}</td>
-                    <td className={className}>{doc.subidoPor}</td>
-                    <td className={className}>{doc.fecha}</td>
+                    <td className={className}>{doc.Unidad}</td>
+                    <td className={className}>{doc.SubidoPor}</td>
+                    <td className={className}>{doc.Fecha}</td>
                     <td className={className}>
                       <Button size="sm" variant="outlined" color="blue">
                         Ver
